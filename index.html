@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elmanuk Ga Stecu Lagi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Chewy&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --snoopy-blue: #4A90E2;
+            --snoopy-light-blue: #87CEEB;
+            --snoopy-pastel: #B3E0FF;
+            --snoopy-yellow: #FFD700;
+            --snoopy-red: #FF6B6B;
+            --snoopy-white: #FFFFFF;
+            --snoopy-gray: #F0F8FF;
+            --text-dark: #2C3E50;
+            --shadow: rgba(74, 144, 226, 0.15);
+            --chewy-font: 'Chewy', cursive;
+            --comic-font: 'Comic Neue', cursive;
+        }
+
+        body {
+            font-family: var(--comic-font);
+            background: linear-gradient(135deg, var(--snoopy-gray) 0%, var(--snoopy-pastel) 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Keonho Icons - BESAR dan BANYAK */
+        .keonho-icon {
+            position: fixed;
+            z-index: -1;
+            pointer-events: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.2;
+        }
+
+        /* Password Screen */
+        .password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            padding: 20px;
+        }
+
+        .password-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .password-container {
+            background: var(--snoopy-white);
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            border: 8px solid var(--snoopy-yellow);
+        }
+
+        .password-title {
+            font-family: var(--chewy-font);
+            color: var(--snoopy-blue);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .password-subtitle {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid var(--snoopy-light-blue);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-family: var(--comic-font);
+            text-align: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--snoopy-blue);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .password-btn {
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-family: var(--chewy-font);
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 100%;
+            letter-spacing: 1px;
+        }
+
+        .password-btn:active {
+            transform: scale(0.98);
+        }
+
+        .password-error {
+            color: var(--snoopy-red);
+            margin-top: 1rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            padding: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .site-title {
+            font-family: var(--chewy-font);
+            color: var(--snoopy-blue);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0 var(--snoopy-yellow);
+        }
+
+        .site-subtitle {
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+        /* Member Container */
+        .member-container {
+            position: relative;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px var(--shadow);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border: 5px solid var(--snoopy-yellow);
+        }
+
+        /* Member Header */
+        .member-header {
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .member-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--snoopy-yellow);
+            color: var(--snoopy-blue);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--chewy-font);
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: 3px solid white;
+        }
+
+        .member-name {
+            font-family: var(--chewy-font);
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .member-role {
+            color: white;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Member Image - 1:1 Square */
+        .member-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* Creates 1:1 aspect ratio */
+            background: linear-gradient(135deg, var(--snoopy-pastel) 0%, var(--snoopy-light-blue) 100%);
+            overflow: hidden;
+        }
+
+        .member-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--chewy-font);
+            font-size: 4rem;
+            color: white;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+        }
+
+        /* Member Info */
+        .member-info {
+            padding: 20px;
+        }
+
+        .telegram-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+
+        .telegram-link:active {
+            transform: scale(0.98);
+        }
+
+        .impression-btn {
+            background: linear-gradient(135deg, var(--snoopy-red) 0%, #FF8E8E 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-family: var(--chewy-font);
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .impression-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-family: var(--chewy-font);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        /* Impression Modal */
+        .impression-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 15px;
+        }
+
+        .impression-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            border: 5px solid var(--snoopy-yellow);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--snoopy-blue) 0%, var(--snoopy-light-blue) 100%);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-title {
+            font-family: var(--chewy-font);
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            padding-right: 40px;
+        }
+
+        .modal-subtitle {
+            color: white;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .impression-text {
+            white-space: pre-line;
+            color: var(--text-dark);
+            background: var(--snoopy-gray);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--snoopy-red);
+        }
+
+        /* Loading State for Photos */
+        .photo-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--snoopy-pastel);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--snoopy-blue);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Swipe Animation */
+        .member-container.swipe-left {
+            animation: swipeLeft 0.3s ease-out;
+        }
+
+        .member-container.swipe-right {
+            animation: swipeRight 0.3s ease-out;
+        }
+
+        @keyframes swipeLeft {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes swipeRight {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .site-title {
+                font-size: 1.8rem;
+            }
+            
+            .member-name {
+                font-size: 1.6rem;
+            }
+            
+            .password-container {
+                padding: 1.5rem;
+            }
+            
+            .password-title {
+                font-size: 1.6rem;
+            }
+            
+            .modal-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .site-title {
+                font-size: 1.6rem;
+            }
+            
+            .member-name {
+                font-size: 1.4rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+            
+            .impression-btn {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Screen -->
+    <div class="password-screen" id="passwordScreen">
+        <div class="password-container">
+            <div class="password-title">Enter the name of the chp</div>
+            <div class="password-subtitle">Masukkan password untuk masuk</div>
+            <input type="text" class="password-input" id="passwordInput" placeholder="Type here...">
+            <button class="password-btn" id="passwordBtn">ENTER</button>
+            <div class="password-error" id="passwordError">Password salah! Coba lagi ya</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="site-title">Elmanuk Ga Stecu Lagi</h1>
+            <p class="site-subtitle">Gua sayang kalian lho</p>
+        </div>
+
+        <!-- Member Container -->
+        <div class="member-container" id="memberContainer">
+            <!-- Content will be filled by JavaScript -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn">
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <button class="nav-btn" id="nextBtn">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Impression Modal -->
+    <div class="impression-modal" id="impressionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">My First Impression</h2>
+                <p class="modal-subtitle" id="modalSubtitle">Untuk member terpilih</p>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="impression-text" id="impressionText">
+                    <!-- Content will be filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data member dengan first impression
+        const members = [
+            { id: 1, name: "Milan", role: "owner elmanuk", telegram: "@taesanu", filename: "milan.jpg" },
+            { id: 2, name: "Diphy", role: "introvert jir", telegram: "@AnomaliJ", filename: "diphy.jpg" },
+            { id: 3, name: "Yashi", role: "the yapper", telegram: "@peerak", filename: "yashi.jpg" },
+            { id: 4, name: "Calix", role: "dia benci gua jir", telegram: "@izshd", filename: "calix.jpg" },
+            { id: 5, name: "Gabby", role: "penipu cnit", telegram: "@hkitty", filename: "gabby.jpg" },
+            { id: 6, name: "Zetta", role: "gossip queen", telegram: "@imaightdw", filename: "zetta.jpg" },
+            { id: 7, name: "Evaniel", role: "pretty boy", telegram: "@iintrovert", filename: "evaniel.jpg" },
+            { id: 8, name: "Elicyee", role: "ibu owner ss", telegram: "@leytter", filename: "elicyee.jpg" },
+            { id: 9, name: "Jude", role: "peluk", telegram: "@sevensdust", filename: "jude.jpg" },
+            { id: 10, name: "Sky", role: "soft boy", telegram: "@roacun", filename: "sky.jpg" },
+            { id: 11, name: "Rani", role: "rani kompa kompa", telegram: "@misla", filename: "rani.jpg" },
+            { id: 12, name: "Ajeth", role: "The Smol One", telegram: "@Pendannt", filename: "ajeth.jpg" },
+            { id: 13, name: "North", role: "utara", telegram: "@rdick", filename: "north.jpg" },
+            { id: 14, name: "Kalista", role: "member baru pun", telegram: "@heavenknowsp", filename: "kalista.jpg" },
+            { id: 15, name: "Carter", role: "Keonho Real", telegram: "@foocl", filename: "carter.jpg" }
+        ];
+
+        // First impression data
+        const impressions = {
+            1: `Milan ini orangnya awalnya cool banget jir ke gua, awal awal gua suka manggilin dia terus, gua mintain peluk, gua kenal dia gara gara dia join gc farming mafia gua sampai waktu itu kita makin deket gara gara gc pmbm dan makin deket lagi gara gara gua sering liat dia di chp orang lain wkakakaa, orangnya kocak ternyata pas udah kenal mana dia nih pinter gua sering liat dia main 10 things, keren betul bisa nebak semuanya dia sampe yang lain ga dikasih waktu buat main jir. I'm glad that we met karna kalo gaada lu, elmanuk gabakal muncul, thank you owner elmanuk. gua ga nyangka dah bisa terbit gc elmanuk cuma gara gara berawal kita lagi gibahin si gbenar, AHAHAHAA. dia nih miskin terus jir mafia nya, padahal udah farming sampe kaya tapi masih minta farming lagi, cape lho gua nyalainnya, dan kayanya dia juga yang paling exited kalo gua nyalain farming WKAKAKAA, soalnya dia selalu bilang "yeay" pas udah gua nyalain, that's such a cute reaction, i feel appreciated by that, thank you milann.\n\nTMI: tadi pagi gua habis mimpiin milan`,
+            2: `Gua gatau banyak sih soal diphy karna gua ketemu dia juga baru si elmanuk ini, gua awal liat dia cuma as npc soalnya jarang banget liat dia nimbrung jir. kayanya dia baru aktif semenjak elmanuk second version di buat dah, gua kira dia anak englishfess ternyata bukan soalnya set up nya mendukung banget jir, mana pake ava bule wkakakaa. she's so kind and such a humble person jir, ghibahnya juga ga terlalu brutal tapi selalu masuk, sesuai tipe akunnya dia nih private beneran se private itu lho dia juga kayanya yang paling introvert di elmanuk deh(?). gua bingung mau isi apalagi soalnya we really just meet, i hope we could get closer yaa diphyy`,
+            3: `Yashi nih yapper parah jir, gua tau dia awalnya juga gara gara dia join gc farming gua, dulu dia suka banget bilang "maaf" jadi misal gua salah ngomong dikit dia langsung bilang "maaf" makanya gua sekarang kecanduan kaya dia jadi sering ngomong"maaf" juga, maaf disini in a joke way yaa ga beneran. she's such a cute person jir, dulu gua inget banget lho dia minta dipanggil adek WKAKAKAA. pas gua panggil ym dia marah, and for me "ym" is sounds funny aja gatau kenapa, makanya sometimes gua panggil dia ym. dia nih paling fomo, selalu ikut kalo diajak nonton, gapernah ketinggalan meski dia kalo pas nonton tuh tengil banget, terus berisik makanya gua galak ke dia(boong yaa) gua suka bilang ke dia "YASHI, NONTON. FOKUS" WKAKAKAKAA, kalo di inget inget lagi lucu jujur, lagiann subtitle nya jadi ga keliatan lho gara gara dia nih saking yapper nya. gua senang karna dia suka sama film missing jir and berlanjut nonton searching, meski gua gatau beneran dia nonton sampe akhir atau ga, wkakakaa.`,
+            4: `Calix tuh apa ya, gua agak ga expect karna bisa join di elmanuk second version karna gua kira dia udah punah jir, entah chp nya kemana, di gc pmbm juga gapernah nimbrung, di chp anak anak yang lain juga gapernah nimbrung. dulu gua pertama kali ketemu gua di gc pmbm, dia sokab ke gua in a good way yaa, and tentu aja dong dia orangnya asik meski agak kasar dikit ye sampe dibuat ch spill spill an(itu gua sebenarnya jir ownernya). dia juga benci gua jir gatau kenapa padahal gua sayang dia lho, gua sayang semua orang tapi emang dia jahat kali ya makanya dia sampe benci gua, ntar kalo gua deak salahin dia aja karna dia suka nyuruh gua deak terus, calix jangan nangis ya kalo gua deak soalnya gua beneran mau deak pun. idk why do people hate her padahal she's just wanna having fun with us, or maybe that people it just wild yang gabisa liat orang lain senang, sehat sehat calix, ignore si ava lads itu yaa, you deserve all happiness kok. and i hope you will find your kisah asap`,
+            5: `Gua sering liat ini anak di lobu, pertama kali ketemu dia di gc mirzani family itu deh kalo masalah? terus tiba tiba dia invite gua ke gc nya cuma buat mainin bot gua and then di kick gitu aja pas selesai main(it's kinda hurt me tho). dimana mana ada dia jir, gua masuk gc mana pun selalu ada dia dah, buset ni anak nolep banget kah? bahkan gua 1 chp sama dia lagi di member elmanuk entah awalnya gimana, AHAHAHAA. gua suka banget tengilin dia because of her cute reaction, it makes me want to annoyed her even more, AHAHAHAA. sorry yaa gabby kalo aku di mata kamu mungkin kaya ngeselin banget, but that's all it just a joke kok, i did that on purpose. gua kalo liat dia di lapak mana pun pasti gua reply "gabriella" entah itu di base, di gc, emang my favorite thing tuh nge rage baiting dia AHAHAHAHAA. tapi sayangnya gua di block dia jir sekarang, apakah karna gua terlalu annoying ya buat dia? gua tuh rasanya masih kurang tengilin dia, gua pengen tengilin dia lagi dengan bilang "@hkitty penipu cnit" WKAKAKAA, seru liat reaction dia yang mau nangis wkakakaa. dia nih kalo ada kesempatan promosi store nya terus jir dengan woridngnya itu, bahkan gua sampe simpen wordingnya. i bet she must be everyone happy virus, be happy gabbyy`,
+            6: `Jujur gua baru deket sama dia gara gara elmanuk ini, pertama kali liat dia gara gara masalah homophobic di lobu. she such a open minded person, that's the thing i like from her, and i don't expect that she's still a minor? that's really cool tho, karna dengan umur dia yang masih minor ini dia udah open dengan banyak hal, ditambah dia tuh apa yaa, bijaksanamungkin? she must be everyone favorite because of her attitude. meski sifat dia kaya gitu gua juga ganyangka kalo dia tuh gossip queen anjir, i don't expect that she would be fun at gossiping, karna keliatannya kaya orang orang yang gasuka badmouthing(even tho everyone do tho) ternyata malah sebaliknya, wkakakaa. gua suka sama pemikiran dia apalagi kalo udah bahas lgbtq she really knows damn well about what is a sexual orientation. buat zetta, i hope we could get closer yaa meskipun gua gatau bakal balik lagi atau ga and lu pun benci gua, maaf pun. i hope you always surrounded by nice people, zetta.`,
+            7: `Gua baru deket sama si evaniel gara gara elmanuk ini juga, jujur gua udah sokab sama dia dulu tapi dia sok cool banget jir padahal tampangnya imut imut gini. he's so kind that agak introvert juga karna dia juga ga sesering itu muncul di elmanuk, but he's so fun at the conversation, gua suka manggilin itu karna gua lagi caper jir sama dia wkakakaa. he must be humble at everyone and i bet he's a pretty boy in real life(sticker bayi mikir). yang bikin buat gua salfok sama dia tuh gara gara dia tuh set up nya imut, he really suits with his muse because for me leehan is such a pretty boy and so does he. dia nih orangnya juga soft, lembut dan ramah, jujur gua kasian karna dia ga diinget sama zetta jir padahal udah seimut ini harusnya di notice, WKAKAKAA. buat adek evan, i hope we could get closer in the future yaa`,
+            8: `Baru deket sama dia juga gara gara elmanuk, ketemu nya pun di gc ss nya, parah banget ini owner cdc jir. she's so cool karna bisa ngebuat gc se gede itu yang jadi tempat nongkrong gua hari hari, gua sekarang jadi jarang mangkal di base gara gara exist nya gc itu dan ch elmanuk second version ini. gua kira dia nih orangnya soft, lemah lembut, polos pas awal tapi ternyata bad mouthing nya parah juga ya(I'm not trayna be sarcastic, bagus malah, WKAKAKAA). she's kind to me, kita baru ketemu tapi dia udah ngasih gift ajaa ke gua, kinda shock tho ga expect dia bakal ngasih. gua ga nyangka dia bakal join elmanuk second version karna dia jarang banget lho muncul di elmanuk ori, gua jarang notice dia pun, i can't give her a long desc anymore karna gua bingung soalnya kita baru deket deket baru baru ini, let's get close elicyee.`,
+            9: `Kita ketemu di gc pmbm, terus juga gua makin deket sama dia gara gara gua suka jbjb di chp nya dia, dulu chp nya dia tuh jadi tempat tongkrongan gua, milan, north, yashi sama yang lainnya, sampe dia bikin ch baru jir yang beneran chp soalnya chp nya dia yang ori udah kaya gc malah jadi tempat nongkrong, wkakakaa. dia awal awal suka banget minta puk puk ke gua, that was so cute ternyata kalo di inget inget, dan gua sekarang malah jadi suka minta peluk ke dia, ini perasaan gua atau doang kah atau dia sekarang emang jarang on? soalnya i really remember kalo dulu dia tuh nolep banget jir, gua liat dia on terus pun, mana suka mainin bot gua jugaa. jude nih orangnya asik banget, humbe and she's really kind, i love how the way she act karna beneran se nice itu jir ke gua. dia kalo gua reply pasti dibales terus, wkakakaa. thanks ya jude karna ga bosen gua mintain peluk terus`,
+            10: `Kita ketemu juga di gc pmbm, at first dia pake ava twilight dari anime spy x anime it seems really cool dan pas gua liat pp kedua nya ternyata pp orang imut jir. sejak saat itu pandangan gua berubah ke dia yang awalnya orang cool jadi orang imut dan gua suka godain dia juga pun. dia nih tipe tipe soft boy banget he's kind and humble tapi gua ga begitu deket sama dia sih even pas elmanuk second version ini terbit karna he's a pretty introvert, jarang muncul disana dan jujur aja gua baru sadar kalo dia ada di elmanuk, maaf ya. dia sok cool jir kalo ke gua, misal gua reply kadang suka ga dibales padahal tampangnya imut imut gini lho. buat sky, ayo lebih sering mangkal di elmanuk, ghibah bareng kitaa.`,
+            11: `Rani nih one of my favorite jir, meski kita ga banyak chattan langsung di rc tapi kita sering interact di ch atau gc, gua suka banget manggilin dia rani rani rani rani, because it sounds funny for me sampe orang orang kenal dia dengan nama rani lagi dan bukan sean ataupun farhel, WKAKAKAA. dia nih yang bikin bot gua viral jir, entah dari bot mafia, dan cuping, big thanks buat rani dah karna sekarang bot cuping gua banyak yang make lho, dan bot mafia pun jadi rame gara gara dia sebar sebarin ke temen temennya meski sekarang farming nya udah jarang jarang sih, wkakakaa. dia nih funny in kocak way gitu loh anjir, gua suka banget ngebully dia gara gara si temennya dia yang namanya natan itu, gua jadi ikut ikutan, misal gua liat dia gua selalu manggil dan gua sekarang jadi suka ngirimin "rani: Gw td dance kompa kompa depan cermin pakek celana dalam ama bh doang trs abang gw lihat gw dan gw kaget" itu awalnya gara gara dia, AHAHAHAA. thanks rani karna udah hidup karna lu funny banget jir, gua selalu ketawa aja kalo inget nama lu, WKAKAKAA. he such a kind person, dia selalu nanggepin gua kalo gua chat dia, cerita ke gua atau bahkan manggil manggil dia gajelas`,
+            12: `ADEKKKKKK AJETHHHHHHH, he's my favorite one too meskipun gua ga banyak interaksi liat dia tapi gua seneng aja kalo liat dia karna dia imut banget, gua ga expect kalo dia sekecil itu like literally kecil banget?.. kayanya kalo dia disamping gua, dia cuma se dada gua dah, i bet he must be like a 150cm an??? karna gua 181 cm that must be a high difference, bahkan kayanya gua sanggup gendong dia 24 jam KARNA DIA NIH IMUT DAN KECIL BANGET. gua suka banget manggilin dia and he always reply with "ha" wkakakaa, meski kadang dia nih stecu ke gua maybe it's because I'm such a creepy guy kali ya makanya dia takut. I bet that he's everyone happy virus, karna vibe dia selalu ceria dan pembawaan dia yang imut itu selalu bikin orang jadi tertular juga, how can a someone hate him? that's wild tho. be happy, adek ajeth`,
+            13: `Yah ada north, males gua jir. gua first time liat dia tuh cool banget anjir apalagi dengan set up nya dia dengan username @rdick nya dan akun sketru nya itu, tapi siapa sangka sekarang malah jadi cute gini? dia nih sok cool jir padahal aslinya tuh clingy dan berjiwa hello kitty, dulu pun gua sokab sama dia meski kayanya dia benci gua dah dulu. i don't really close with her tho, gua cuma sering liat dia di chp gitu, dia nih keliatannya bestie banget sama si milan sampe gua kira dulu mereka tuh aslinya pacaran, username dia bagus bagus jir gapernah gagal dan pasti selalu based on keonho, se cinta itu ya dia sama keonho(gua). kata kata favorite dia tuh "co" i sometimes hold my self buat ga pake kata itu jir tapi di pikir pikir candu juga ya(meski gua gapernah make sih). i can't really give a long description about her karna otak gua dah kosong sekarang mikirin si north, soalnya kita juga ga sesering itu interact but i often see her, dan dia nih ada dimana mana, wkakakaa`,
+            14: `Maybe it will be the shortest fi, karna gua ga begitu kenal sama si kalista dan dia juga baru join elmanuk kemarin kan? gara gara di invite zetta buat ikut ngehujat si j word, WKAKAKAA. she's kinda reminds me of my friend(si blake itu) because her typing itu agak mirip aja sama si blake she always use "i-u" instead of "aku-kamu" mirip kaya temen gua, wkakakaa. semoga lu bisa lebih sering muncul yaa, and i hope we get closer too, I'm so sorry kalistaa karna gua juga bener bener baru ketemu lu dan belum kenal banget jadi gua bingung apa yang mau diisi`,
+            15: `Gua ganteng.`
+        };
+
+        // State management
+        let currentMemberIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // DOM Elements
+        const passwordScreen = document.getElementById('passwordScreen');
+        const mainContent = document.getElementById('mainContent');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordBtn = document.getElementById('passwordBtn');
+        const passwordError = document.getElementById('passwordError');
+        const memberContainer = document.getElementById('memberContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const impressionModal = document.getElementById('impressionModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const impressionText = document.getElementById('impressionText');
+        const modalClose = document.getElementById('modalClose');
+
+        // Create floating Keonho icons - BANYAK dan BESAR
+        function createKeonhoIcons() {
+            const keonhoFiles = ['keonho.png', 'keonho2.png', 'keonho3.png'];
+            
+            // Membuat 25 icons (lebih banyak dari sebelumnya)
+            for (let i = 0; i < 25; i++) {
+                const icon = document.createElement('div');
+                icon.className = 'keonho-icon';
+                
+                // Random keonho image
+                const keonhoFile = keonhoFiles[Math.floor(Math.random() * keonhoFiles.length)];
+                
+                // Random position and size - BESAR (80-150px)
+                const size = 80 + Math.random() * 70; // Lebih besar dari sebelumnya
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Random animation
+                const duration = 20 + Math.random() * 30;
+                const delay = Math.random() * 10;
+                const opacity = 0.15 + Math.random() * 0.1; // Lebih terang
+                
+                icon.style.width = `${size}px`;
+                icon.style.height = `${size}px`;
+                icon.style.left = `${left}%`;
+                icon.style.top = `${top}%`;
+                icon.style.opacity = `${opacity}`;
+                icon.style.animation = `float ${duration}s ease-in-out ${delay}s infinite alternate`;
+                icon.style.backgroundImage = `url('${keonhoFile}')`;
+                
+                document.body.appendChild(icon);
+            }
+            
+            // Add floating animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0% { transform: translateY(0px) rotate(0deg) scale(1); }
+                    25% { transform: translateY(-20px) rotate(5deg) scale(1.1); }
+                    50% { transform: translateY(-30px) rotate(0deg) scale(1.05); }
+                    75% { transform: translateY(-15px) rotate(-5deg) scale(1.1); }
+                    100% { transform: translateY(0px) rotate(0deg) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Password Check
+        passwordBtn.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function checkPassword() {
+            const password = passwordInput.value.trim().toLowerCase();
+            if (password === 'elmanuk') {
+                passwordScreen.classList.add('hidden');
+                mainContent.classList.add('active');
+                createKeonhoIcons();
+                renderMember(currentMemberIndex);
+                
+                setTimeout(() => {
+                    passwordScreen.style.display = 'none';
+                }, 500);
+            } else {
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+                
+                // Shake animation
+                const container = document.querySelector('.password-container');
+                container.classList.add('shake');
+                setTimeout(() => {
+                    container.classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        // Add shake animation
+        const shakeStyle = document.createElement('style');
+        shakeStyle.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            .shake {
+                animation: shake 0.5s ease-in-out;
+            }
+        `;
+        document.head.appendChild(shakeStyle);
+
+        // Render Member with photo (1:1 ratio)
+        function renderMember(index) {
+            const member = members[index];
+            const filename = member.filename;
+            
+            memberContainer.innerHTML = `
+                <div class="member-header">
+                    <div class="member-number">${member.id}</div>
+                    <h2 class="member-name">${member.name}</h2>
+                    <p class="member-role">${member.role}</p>
+                </div>
+                <div class="member-image-container">
+                    <div class="member-image">
+                        <div class="image-placeholder">${member.name.charAt(0)}</div>
+                        <div class="photo-loading">
+                            <div class="loading-spinner"></div>
+                            <div>Loading photo...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="member-info">
+                    <a href="https://t.me/${member.telegram.replace('@', '')}" class="telegram-link" target="_blank">
+                        <i class="fab fa-telegram"></i> ${member.telegram}
+                    </a>
+                    <button class="impression-btn" onclick="openImpression(${index})">
+                        <i class="fas fa-heart"></i> My First Impression for ${member.name}
+                    </button>
+                </div>
+            `;
+            
+            // Load photo
+            loadPhoto(filename, index);
+            
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === members.length - 1;
+        }
+
+        // Load photo with error handling
+        function loadPhoto(filename, memberIndex) {
+            const img = new Image();
+            img.onload = function() {
+                const imageContainer = memberContainer.querySelector('.member-image');
+                if (imageContainer) {
+                    const placeholder = imageContainer.querySelector('.image-placeholder');
+                    const loading = imageContainer.querySelector('.photo-loading');
+                    
+                    if (placeholder) placeholder.style.display = 'none';
+                    if (loading) loading.style.display = 'none';
+                    
+                    // Remove existing image if any
+                    const existingImg = imageContainer.querySelector('img');
+                    if (existingImg) existingImg.remove();
+                    
+                    // Add new image
+                    imageContainer.appendChild(img);
+                    img.style.display = 'block';
+                }
+            };
+            
+            img.onerror = function() {
+                const imageContainer = memberContainer.querySelector('.member-image');
+                if (imageContainer) {
+                    const loading = imageContainer.querySelector('.photo-loading');
+                    if (loading) loading.style.display = 'none';
+                }
+            };
+            
+            img.src = filename;
+            img.alt = members[memberIndex].name;
+        }
+
+        // Navigation
+        prevBtn.addEventListener('click', () => {
+            if (currentMemberIndex > 0) {
+                currentMemberIndex--;
+                memberContainer.classList.add('swipe-right');
+                setTimeout(() => {
+                    renderMember(currentMemberIndex);
+                    memberContainer.classList.remove('swipe-right');
+                }, 300);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentMemberIndex < members.length - 1) {
+                currentMemberIndex++;
+                memberContainer.classList.add('swipe-left');
+                setTimeout(() => {
+                    renderMember(currentMemberIndex);
+                    memberContainer.classList.remove('swipe-left');
+                }, 300);
+            }
+        });
+
+        // Swipe Navigation for Mobile
+        memberContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        memberContainer.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const difference = touchStartX - touchEndX;
+            
+            if (Math.abs(difference) > swipeThreshold) {
+                if (difference > 0 && currentMemberIndex < members.length - 1) {
+                    // Swipe left - next member
+                    currentMemberIndex++;
+                    memberContainer.classList.add('swipe-left');
+                    setTimeout(() => {
+                        renderMember(currentMemberIndex);
+                        memberContainer.classList.remove('swipe-left');
+                    }, 300);
+                } else if (difference < 0 && currentMemberIndex > 0) {
+                    // Swipe right - previous member
+                    currentMemberIndex--;
+                    memberContainer.classList.add('swipe-right');
+                    setTimeout(() => {
+                        renderMember(currentMemberIndex);
+                        memberContainer.classList.remove('swipe-right');
+                    }, 300);
+                }
+            }
+        }
+
+        // Impression Modal
+        window.openImpression = function(index) {
+            const member = members[index];
+            modalTitle.textContent = `My First Impression for ${member.name}`;
+            modalSubtitle.textContent = member.role;
+            impressionText.textContent = impressions[member.id];
+            impressionModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        modalClose.addEventListener('click', closeModal);
+        impressionModal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        function closeModal() {
+            impressionModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(e) {
+            if (passwordScreen.style.display !== 'none') return;
+            
+            if (e.key === 'ArrowLeft' && currentMemberIndex > 0) {
+                currentMemberIndex--;
+                renderMember(currentMemberIndex);
+            } else if (e.key === 'ArrowRight' && currentMemberIndex < members.length - 1) {
+                currentMemberIndex++;
+                renderMember(currentMemberIndex);
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', function() {
+            passwordInput.focus();
+        });
+    </script>
+</body>
+</html>
